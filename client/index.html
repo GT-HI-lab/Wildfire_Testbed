@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildfire Client</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/env.js"></script>
+  </head>
+  <body>
+    <main class="client-layout">
+      <section class="view-panel">
+        <header class="hud">
+          <div>
+            <p class="eyebrow">Participant</p>
+            <h1>Firefighter View</h1>
+          </div>
+          <div class="join">
+            <input id="sessionId" value="pilot-001" aria-label="Session ID" />
+            <button id="joinBtn">Join</button>
+          </div>
+        </header>
+
+        <div class="scene">
+          <canvas id="firstPerson" aria-label="First person wildfire view"></canvas>
+          <canvas id="miniMap" aria-label="Drone minimap"></canvas>
+          <div id="pauseOverlay" class="pause-overlay" hidden>
+            <strong>Session Paused</strong>
+            <span id="pauseReason"></span>
+          </div>
+        </div>
+
+        <footer class="controls">
+          <div class="move-grid">
+            <button data-move="0,-4" aria-label="Move north">↑</button>
+            <button data-move="-4,0" aria-label="Move west">←</button>
+            <button data-move="4,0" aria-label="Move east">→</button>
+            <button data-move="0,4" aria-label="Move south">↓</button>
+          </div>
+          <button id="sprayBtn">Spray</button>
+          <button id="cutBtn" class="secondary">Cut</button>
+          <button id="acceptBtn" class="secondary">Accept AI</button>
+          <button id="overrideBtn" class="secondary">Override</button>
+          <div class="readout" id="readout"></div>
+        </footer>
+      </section>
+
+      <aside class="chat-panel">
+        <section class="mission">
+          <h2>Mission</h2>
+          <p id="missionText">Join a session.</p>
+        </section>
+        <section class="messages" id="messages"></section>
+        <form id="chatForm" class="chat-form">
+          <textarea id="chatInput" rows="3" placeholder="Message helicopter AI"></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </aside>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
