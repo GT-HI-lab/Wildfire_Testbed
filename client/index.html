@@ -33,15 +33,25 @@
 
         <footer class="controls">
           <div class="move-grid">
-            <button data-move="0,-4" aria-label="Move north">↑</button>
-            <button data-move="-4,0" aria-label="Move west">←</button>
-            <button data-move="4,0" aria-label="Move east">→</button>
-            <button data-move="0,4" aria-label="Move south">↓</button>
+            <button data-move="0,-4" aria-label="Move north">N</button>
+            <button data-move="-4,0" aria-label="Move west">W</button>
+            <button data-move="4,0" aria-label="Move east">E</button>
+            <button data-move="0,4" aria-label="Move south">S</button>
           </div>
           <button id="sprayBtn">Spray</button>
           <button id="cutBtn" class="secondary">Cut</button>
           <button id="acceptBtn" class="secondary">Accept AI</button>
           <button id="overrideBtn" class="secondary">Override</button>
+          <div class="bulldozer-controls">
+            <span>Bulldozer</span>
+            <div class="bulldozer-row">
+              <button data-bulldozer-move="0,-4" class="secondary" aria-label="Move bulldozer north">N</button>
+              <button data-bulldozer-move="-4,0" class="secondary" aria-label="Move bulldozer west">W</button>
+              <button data-bulldozer-move="4,0" class="secondary" aria-label="Move bulldozer east">E</button>
+              <button data-bulldozer-move="0,4" class="secondary" aria-label="Move bulldozer south">S</button>
+              <button id="bulldozerCutBtn" class="secondary">Firebreak</button>
+            </div>
+          </div>
           <div class="readout" id="readout"></div>
         </footer>
       </section>
@@ -50,6 +60,18 @@
         <section class="mission">
           <h2>Mission</h2>
           <p id="missionText">Join a session.</p>
+        </section>
+        <section class="drone-report">
+          <h2>Drone Scout Report</h2>
+          <p id="droneReport">Waiting for drone report.</p>
+        </section>
+        <section class="trust-feedback">
+          <h2>Helicopter Feedback</h2>
+          <div class="trust-row">
+            <button data-trust="trust">Trust +</button>
+            <button data-trust="neutral" class="secondary">Neutral</button>
+            <button data-trust="distrust" class="secondary">Distrust -</button>
+          </div>
         </section>
         <section class="messages" id="messages"></section>
         <form id="chatForm" class="chat-form">

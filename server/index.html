@@ -20,6 +20,8 @@
             <input id="sessionId" value="pilot-001" aria-label="Session ID" />
             <button id="connectBtn">Connect</button>
             <button id="resetBtn" class="secondary">Reset</button>
+            <button id="exportCsvBtn" class="secondary">Export CSV</button>
+            <button id="exportJsonBtn" class="secondary">Export JSON</button>
           </div>
         </header>
         <canvas id="mapCanvas" aria-label="Experiment map"></canvas>
@@ -29,6 +31,7 @@
           <span><i class="water"></i>Water</span>
           <span><i class="firefighter"></i>Firefighter</span>
           <span><i class="drone"></i>Drone AI</span>
+          <span><i class="bulldozer"></i>Bulldozer</span>
           <span><i class="helicopter"></i>Helicopter AI</span>
         </footer>
       </section>
@@ -67,6 +70,11 @@
         <section class="metrics" id="metrics"></section>
 
         <section class="agent-list" id="agentList"></section>
+
+        <section class="experiment-panel">
+          <h2>Experiment Debug</h2>
+          <div id="experimentDebug"></div>
+        </section>
 
         <section class="events">
           <h2>Event Log</h2>

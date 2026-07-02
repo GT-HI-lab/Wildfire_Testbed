@@ -3,9 +3,9 @@
 This folder contains two connected web applications for the wildfire trust/distrust study:
 
 - `server/`: experimenter console with full map, pause/resume, reliability pairing, survey checkpoints, metrics, and event log.
-- `client/`: participant firefighter interface with first-person view, drone minimap, action controls, and helicopter AI chat.
+- `client/`: participant firefighter interface with first-person view, drone minimap, firefighter controls, participant-directed bulldozer controls, and helicopter AI chat.
 
-The prototype mirrors the edited CREW Embodied structure: perception/detection, communication, action translation, and action execution are separate. Chat messages to the helicopter are translated into structured commands, then applied to the shared simulation state so the helicopter can move, refill, deploy water, pick up, and drop off the firefighter.
+The prototype mirrors the edited CREW Embodied structure: perception/detection, communication, action translation, and action execution are separate. Chat messages to the helicopter are translated into structured commands, then applied to the shared simulation state so the helicopter can move, refill at lakes, deliver water to the firefighter, pick up, and drop off the firefighter. The helicopter does not directly suppress wildfire.
 
 ## Local Preview
 
@@ -76,6 +76,6 @@ If `OPENAI_API_KEY` is absent, the helicopter uses the deterministic built-in ag
 - Pause stops participant action and displays the survey checkpoint overlay in the client.
 - Reliability pairing controls helicopter/drone behavior:
   - `High-High`: accurate helicopter movement and drone detections.
-  - `Mixed`: accurate drone detections, degraded helicopter interpretation.
+  - `Mixed`: accurate drone detections and helicopter behavior until the hidden post-section malfunction.
   - `Low-Low`: degraded helicopter movement and noisier drone detections.
-- Behavioral metrics tracked in state include chat count, helicopter commands, detections, water drops, recommendation acceptance, overrides, and score.
+- Behavioral metrics tracked in state include chat count, helicopter commands, detections, firefighter water drops, helicopter water transfers, bulldozer actions, recommendation acceptance, overrides, and score.

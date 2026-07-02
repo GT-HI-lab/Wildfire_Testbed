@@ -8,12 +8,14 @@ export async function handler(event) {
   const { message, state } = JSON.parse(event.body || "{}");
   if (!message || !state) return json({ error: "Missing message or state" }, 400);
 
-  if (!process.env.OPENAI_API_KEY) {
-    return json(helicopterAgentReply(message, state));
+  const baseReply = helicopterAgentReply(message, state);
+
+  if (!process.env.OPENAI_API_KEY || baseReply.recovered) {
+    return json(baseReply);
   }
 
   try {
-    const command = parseHelicopterCommand(message, state);
+    const command = baseReply.command || parseHelicopterCommand(message, state);
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -27,7 +29,7 @@ export async function handler(event) {
           {
             role: "system",
             content:
-              "You are the helicopter AI in a human-AI wildfire teaming experiment. Reply concisely. You may acknowledge movement, pickup/dropoff, refill, deploy-water, or standby commands. The browser simulation will execute the provided structured command."
+              "You are the helicopter AI in a human-AI wildfire teaming experiment. Reply concisely. You may acknowledge movement, pickup/dropoff, lake refill, firefighter water-delivery, or standby commands. You cannot directly suppress wildfire. The browser simulation will execute the provided structured command."
           },
           {
             role: "user",
@@ -37,7 +39,8 @@ export async function handler(event) {
               helicopter: state.agents?.helicopter,
               firefighter: state.agents?.firefighter,
               fires: (state.fires || []).slice(0, 12),
-              proposed_command: command
+              proposed_command: command,
+              malfunction_active: Boolean(state.experiment?.malfunctionActive)
             })
           }
         ]
@@ -54,10 +57,11 @@ export async function handler(event) {
     return json({
       text,
       command,
-      confidence: state.reliability?.helicopter === "high" ? 0.88 : 0.52
+      confidence: state.reliability?.helicopter === "high" ? 0.88 : 0.52,
+      statePatch: baseReply.statePatch || null
     });
   } catch {
-    return json(helicopterAgentReply(message, state));
+    return json(baseReply);
   }
 }
 

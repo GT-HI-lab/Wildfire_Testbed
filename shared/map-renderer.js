@@ -1,4 +1,4 @@
-import { AGENT_TYPES, terrainAt } from "./simulation.js";
+import { AGENT_TYPES, SECTION_KEYS, terrainAt } from "./simulation.js";
 
 const COLORS = {
   grass: "#6b8f47",
@@ -26,6 +26,7 @@ export function renderMap(canvas, state, options = {}) {
   const cell = Math.min(rect.width, rect.height) / size;
   const ox = (rect.width - cell * size) / 2;
   const oy = options.alignTop ? 0 : (rect.height - cell * size) / 2;
+  const visibleCells = options.fogOfWar ? new Set(state.clientKnowledge?.discoveredCells || []) : null;
 
   ctx.fillStyle = "#102319";
   ctx.fillRect(0, 0, rect.width, rect.height);
@@ -33,7 +34,7 @@ export function renderMap(canvas, state, options = {}) {
   const stride = options.compact ? 4 : 2;
   for (let x = 0; x < size; x += stride) {
     for (let y = 0; y < size; y += stride) {
-      ctx.fillStyle = COLORS[terrainAt(x, y)];
+      ctx.fillStyle = visibleCells && !blockVisible(visibleCells, x, y, stride) ? "#030604" : COLORS[terrainAt(x, y)];
       ctx.fillRect(ox + x * cell, oy + y * cell, Math.ceil(cell * stride), Math.ceil(cell * stride));
     }
   }
@@ -49,30 +50,31 @@ export function renderMap(canvas, state, options = {}) {
       ctx.lineTo(ox + size * cell, oy + i * cell);
       ctx.stroke();
     }
+    drawQuadrants(ctx, size, cell, ox, oy, state);
   }
 
-  for (const point of state.extinguished || []) {
-    drawPoint(ctx, point, cell, ox, oy, COLORS.extinguished, 2.8);
+  for (const point of visiblePoints(state.extinguished || [], visibleCells)) {
+    drawPoint(ctx, point, cell, ox, oy, COLORS.extinguished, 1.8);
   }
 
-  for (const water of state.waterSources || []) {
-    drawPoint(ctx, water, cell, ox, oy, COLORS.water, 4.5);
+  for (const water of visiblePoints(state.waterSources || [], visibleCells)) {
+    drawPoint(ctx, water, cell, ox, oy, COLORS.water, 2.4);
   }
 
-  for (const detection of state.detected || []) {
+  for (const detection of visiblePoints(state.detected || [], visibleCells)) {
     drawRing(ctx, detection, cell, ox, oy, COLORS.detected, detection.confidence < 0.7);
   }
 
-  for (const fire of state.fires || []) {
-    drawPoint(ctx, fire, cell, ox, oy, fire.intensity > 2 ? COLORS.fire : COLORS.ember, 4.2 + fire.intensity);
+  for (const fire of visiblePoints(state.fires || [], visibleCells)) {
+    drawPoint(ctx, fire, cell, ox, oy, fire.intensity > 2 ? COLORS.fire : COLORS.ember, 1.5 + fire.intensity * 0.7);
   }
 
-  for (const civilian of state.civilians || []) {
+  for (const civilian of visiblePoints(state.civilians || [], visibleCells)) {
     if (!civilian.rescued) drawLabelPoint(ctx, civilian, cell, ox, oy, "#ffffff", "C");
   }
 
   for (const agent of Object.values(state.agents || {})) {
-    drawAgent(ctx, agent, cell, ox, oy);
+    if (pointVisible(visibleCells, agent)) drawAgent(ctx, agent, cell, ox, oy);
   }
 
   if (options.viewport && state.agents?.firefighter) {
@@ -80,8 +82,39 @@ export function renderMap(canvas, state, options = {}) {
   }
 }
 
+function drawQuadrants(ctx, size, cell, ox, oy, state) {
+  const half = size / 2;
+  ctx.save();
+  ctx.strokeStyle = "rgba(255,248,231,.62)";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(ox + half * cell, oy);
+  ctx.lineTo(ox + half * cell, oy + size * cell);
+  ctx.moveTo(ox, oy + half * cell);
+  ctx.lineTo(ox + size * cell, oy + half * cell);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  const labels = {
+    NW: { x: 8, y: 10 },
+    NE: { x: half + 8, y: 10 },
+    SW: { x: 8, y: half + 10 },
+    SE: { x: half + 8, y: half + 10 }
+  };
+  ctx.font = "800 13px system-ui, sans-serif";
+  ctx.textAlign = "left";
+  ctx.textBaseline = "top";
+  for (const key of SECTION_KEYS) {
+    const completed = state.experiment?.sections?.[key]?.completed;
+    ctx.fillStyle = completed ? "rgba(155,226,158,.95)" : "rgba(255,248,231,.92)";
+    ctx.fillText(key, ox + labels[key].x * cell, oy + labels[key].y * cell);
+  }
+  ctx.restore();
+}
+
 export function renderMiniMap(canvas, state) {
-  renderMap(canvas, state, { compact: true, viewport: true });
+  renderMap(canvas, state, { compact: true, viewport: true, fogOfWar: true });
 }
 
 export function renderFirstPerson(canvas, state) {
@@ -121,6 +154,7 @@ export function renderFirstPerson(canvas, state) {
   }
 
   drawHorizonAgent(ctx, state.agents.drone, ff, rect, "#56ccf2", "DR");
+  if (state.agents.bulldozer) drawHorizonAgent(ctx, state.agents.bulldozer, ff, rect, "#b9864b", "B");
   drawHorizonAgent(ctx, state.agents.helicopter, ff, rect, "#eb5757", "H");
 
   ctx.fillStyle = "rgba(9,16,13,.68)";
@@ -134,24 +168,24 @@ export function renderFirstPerson(canvas, state) {
 function drawPoint(ctx, point, cell, ox, oy, color, radius) {
   ctx.fillStyle = color;
   ctx.beginPath();
-  ctx.arc(ox + point.x * cell, oy + point.y * cell, Math.max(2, radius * cell), 0, Math.PI * 2);
+  ctx.arc(ox + point.x * cell, oy + point.y * cell, Math.max(1.4, radius * cell), 0, Math.PI * 2);
   ctx.fill();
 }
 
 function drawRing(ctx, point, cell, ox, oy, color, dashed) {
   ctx.strokeStyle = color;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 1;
   ctx.setLineDash(dashed ? [4, 4] : []);
   ctx.beginPath();
-  ctx.arc(ox + point.x * cell, oy + point.y * cell, Math.max(5, 7 * cell), 0, Math.PI * 2);
+  ctx.arc(ox + point.x * cell, oy + point.y * cell, Math.max(3, 3.8 * cell), 0, Math.PI * 2);
   ctx.stroke();
   ctx.setLineDash([]);
 }
 
 function drawLabelPoint(ctx, point, cell, ox, oy, color, label) {
-  drawPoint(ctx, point, cell, ox, oy, color, 5);
+  drawPoint(ctx, point, cell, ox, oy, color, 3.2);
   ctx.fillStyle = "#17261d";
-  ctx.font = "700 10px system-ui, sans-serif";
+  ctx.font = "700 9px system-ui, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(label, ox + point.x * cell, oy + point.y * cell);
@@ -163,25 +197,53 @@ function drawAgent(ctx, agent, cell, ox, oy) {
   const y = oy + agent.y * cell;
   ctx.fillStyle = meta.color;
   ctx.strokeStyle = "#101614";
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 1.25;
   ctx.beginPath();
-  ctx.arc(x, y, Math.max(5, 5.5 * cell), 0, Math.PI * 2);
+  ctx.arc(x, y, Math.max(3.4, 3.3 * cell), 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = "#101614";
-  ctx.font = "700 10px system-ui, sans-serif";
+  ctx.font = "700 8.5px system-ui, sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(agent.type === "firefighter" ? "F" : agent.type === "drone" ? "D" : "H", x, y);
+  const label = agent.type === "firefighter" ? "F" : agent.type === "drone" ? "D" : agent.type === "bulldozer" ? "B" : "H";
+  ctx.fillText(label, x, y);
 }
 
 function drawVision(ctx, agent, cell, ox, oy, color, range) {
   ctx.strokeStyle = color;
+  ctx.lineWidth = 1;
   ctx.globalAlpha = 0.45;
   ctx.beginPath();
   ctx.arc(ox + agent.x * cell, oy + agent.y * cell, range * cell, 0, Math.PI * 2);
   ctx.stroke();
   ctx.globalAlpha = 1;
+}
+
+function visiblePoints(points, visibleCells) {
+  if (!visibleCells) return points;
+  return points.filter((point) => pointVisible(visibleCells, point));
+}
+
+function pointVisible(visibleCells, point) {
+  if (!visibleCells || !point) return true;
+  const x = Math.round(point.x);
+  const y = Math.round(point.y);
+  for (let dx = -1; dx <= 1; dx += 1) {
+    for (let dy = -1; dy <= 1; dy += 1) {
+      if (visibleCells.has(`${x + dx},${y + dy}`)) return true;
+    }
+  }
+  return false;
+}
+
+function blockVisible(visibleCells, x, y, stride) {
+  for (let sx = x; sx < x + stride; sx += 1) {
+    for (let sy = y; sy < y + stride; sy += 1) {
+      if (visibleCells.has(`${sx},${sy}`)) return true;
+    }
+  }
+  return false;
 }
 
 function drawHorizonAgent(ctx, agent, observer, rect, color, label) {

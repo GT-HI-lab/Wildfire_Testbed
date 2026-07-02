@@ -10,9 +10,15 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: #101614;
 }
 
@@ -59,7 +65,8 @@ textarea {
 }
 
 .client-layout {
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
 }
@@ -68,6 +75,7 @@ textarea {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-width: 0;
+  min-height: 0;
 }
 
 .hud,
@@ -78,7 +86,7 @@ textarea {
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 11px 14px;
 }
 
 .hud {
@@ -88,6 +96,7 @@ textarea {
 .controls {
   border-top: 1px solid #2d3e33;
   flex-wrap: wrap;
+  gap: 0.65rem;
 }
 
 .eyebrow {
@@ -121,7 +130,7 @@ h2 {
 
 .scene {
   position: relative;
-  min-height: 520px;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -154,6 +163,10 @@ h2 {
   background: rgba(16, 22, 20, 0.76);
   color: #fff8e7;
   font-size: 1.1rem;
+}
+
+.pause-overlay[hidden] {
+  display: none;
 }
 
 .pause-overlay strong {
@@ -189,31 +202,74 @@ h2 {
   font-size: 0.88rem;
 }
 
-.chat-panel {
+.bulldozer-controls {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  border-left: 1px solid #2d3e33;
-  background: #111b16;
-  min-height: 100vh;
+  gap: 6px;
+  color: #d8c5a7;
+  font-size: 0.78rem;
 }
 
-.mission {
-  padding: 16px;
+.bulldozer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bulldozer-row button {
+  min-height: 36px;
+  padding-inline: 0.55rem;
+}
+
+.chat-panel {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  border-left: 1px solid #2d3e33;
+  background: #111b16;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mission,
+.drone-report,
+.trust-feedback {
+  padding: 12px 14px;
   border-bottom: 1px solid #2d3e33;
 }
 
-.mission p {
+.mission p,
+.drone-report p {
   margin-bottom: 0;
   color: #dce7d9;
   line-height: 1.4;
 }
 
+.drone-report {
+  background: #142019;
+}
+
+.drone-report p {
+  color: #c9e7ea;
+}
+
+.trust-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.trust-row button {
+  padding-inline: 0.45rem;
+  white-space: nowrap;
+}
+
 .messages {
   overflow: auto;
-  padding: 16px;
+  min-height: 0;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .message {
@@ -239,17 +295,25 @@ h2 {
 
 .chat-form {
   display: grid;
-  gap: 10px;
-  padding: 16px;
+  gap: 8px;
+  padding: 12px 14px;
   border-top: 1px solid #2d3e33;
 }
 
 @media (max-width: 940px) {
+  html,
+  body {
+    overflow: auto;
+  }
+
   .client-layout {
     grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
   }
 
   .chat-panel {
+    height: auto;
     min-height: 420px;
     border-left: 0;
     border-top: 1px solid #2d3e33;

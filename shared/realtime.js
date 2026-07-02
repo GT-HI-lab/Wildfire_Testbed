@@ -25,6 +25,7 @@ export class SessionStore {
     this.channel = new BroadcastChannel(`wildfire:${sessionId}`);
     this.channel.onmessage = (event) => this.handleLocalMessage(event.data);
     this.supabase = null;
+    this.remoteChannel = null;
     this.mode = "local";
   }
 
@@ -39,8 +40,8 @@ export class SessionStore {
   }
 
   async subscribeSupabase() {
-    this.supabase
-      .channel(`wildfire-session-${this.sessionId}`)
+    this.remoteChannel = this.supabase.channel(`wildfire-session-${this.sessionId}`);
+    this.remoteChannel
       .on(
         "postgres_changes",
         {
@@ -81,6 +82,8 @@ export class SessionStore {
   }
 
   async saveState(state) {
+    const pendingEvents = [...(state.pendingEvents || [])];
+    state.pendingEvents = [];
     state.updatedAt = Date.now();
     if (this.mode === "supabase") {
       await this.supabase.from("wildfire_sessions").upsert({
@@ -90,6 +93,16 @@ export class SessionStore {
         paused: state.paused,
         updated_at: new Date().toISOString()
       });
+      if (pendingEvents.length) {
+        await this.supabase.from("wildfire_events").insert(
+          pendingEvents.map((event) => ({
+            session_id: this.sessionId,
+            tick: event.tick,
+            event_type: event.eventType || event.type,
+            body: event
+          }))
+        );
+      }
     }
 
     localStorage.setItem(this.localKey, JSON.stringify(state));
@@ -127,6 +140,14 @@ export class SessionStore {
   handleLocalMessage(data) {
     if (data?.type === "state") this.handlers.onState?.(data.state);
     if (data?.type === "message") this.handlers.onRemoteMessage?.(data.message);
+  }
+
+  async close() {
+    this.handlers = {};
+    if (this.channel) this.channel.close();
+    if (this.supabase && this.remoteChannel) await this.supabase.removeChannel(this.remoteChannel);
+    this.channel = null;
+    this.remoteChannel = null;
   }
 }
 
