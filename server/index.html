@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildfire Server Console</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/env.js"></script>
+  </head>
+  <body>
+    <main class="layout">
+      <section class="map-panel">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">CREW Wildfire Web</p>
+            <h1>Server Console</h1>
+          </div>
+          <div class="session-controls">
+            <input id="sessionId" value="pilot-001" aria-label="Session ID" />
+            <button id="connectBtn">Connect</button>
+            <button id="resetBtn" class="secondary">Reset</button>
+            <button id="exportCsvBtn" class="secondary">Export CSV</button>
+            <button id="exportJsonBtn" class="secondary">Export JSON</button>
+          </div>
+        </header>
+        <canvas id="mapCanvas" aria-label="Experiment map"></canvas>
+        <footer class="legend">
+          <span><i class="fire"></i>Fire</span>
+          <span><i class="detect"></i>Drone detection</span>
+          <span><i class="water"></i>Water</span>
+          <span><i class="firefighter"></i>Firefighter</span>
+          <span><i class="drone"></i>Drone AI</span>
+          <span><i class="bulldozer"></i>Bulldozer</span>
+          <span><i class="helicopter"></i>Helicopter AI</span>
+        </footer>
+      </section>
+
+      <aside class="side-panel">
+        <section class="control-block">
+          <h2>Session</h2>
+          <div class="status-row">
+            <span id="statusPill" class="pill">Disconnected</span>
+            <span id="tickLabel">Tick 0</span>
+          </div>
+          <div class="mission-status">
+            <span>Mission remaining</span>
+            <strong id="missionClock">30:00</strong>
+            <small id="aiStatus">AI checking</small>
+            <small id="realtimeStatus">Realtime checking</small>
+          </div>
+          <div class="button-row">
+            <button id="pauseBtn">Pause</button>
+            <button id="resumeBtn" class="secondary">Resume</button>
+          </div>
+          <label>
+            Helicopter condition
+            <select id="conditionSelect">
+              <option>High-High</option>
+              <option selected>Mixed</option>
+              <option>Low-Low</option>
+            </select>
+            <span id="conditionSummary" class="condition-summary"></span>
+          </label>
+        </section>
+
+        <section class="control-block survey">
+          <h2>Survey Checkpoint</h2>
+          <small id="surveyUrlStatus" class="ai-status">Survey link checking</small>
+          <div class="button-row">
+            <button data-survey="T1">T1</button>
+            <button data-survey="T2">T2</button>
+            <button data-survey="T3">T3</button>
+          </div>
+          <button id="clearSurveyBtn" class="secondary wide">End Survey &amp; Resume</button>
+        </section>
+
+        <section class="metrics" id="metrics"></section>
+
+        <section class="agent-list" id="agentList"></section>
+
+        <section class="experiment-panel">
+          <h2>Experiment Debug</h2>
+          <div id="experimentDebug"></div>
+        </section>
+
+        <section class="events">
+          <h2>Event Log</h2>
+          <ol id="eventList"></ol>
+        </section>
+      </aside>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

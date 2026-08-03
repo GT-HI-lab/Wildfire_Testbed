@@ -1,0 +1,496 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #101614;
+  color: #fff8e7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #101614;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  background: #f2c94c;
+  color: #142016;
+  min-height: 42px;
+  padding: 0 0.9rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #243229;
+  color: #f6f1e8;
+  border: 1px solid #405242;
+}
+
+input,
+select,
+textarea {
+  border-radius: 6px;
+  border: 1px solid #405242;
+  background: #151f1a;
+  color: #fff8e7;
+}
+
+input,
+select {
+  min-height: 42px;
+  padding: 0 0.75rem;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  padding: 0.75rem;
+}
+
+.client-layout {
+  height: 100vh;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(320px, 28vw, 360px);
+}
+
+.view-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.hud,
+.controls {
+  background: #111b16;
+  border-color: #2d3e33;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+}
+
+.hud {
+  border-bottom: 1px solid #2d3e33;
+}
+
+.controls {
+  border-top: 1px solid #2d3e33;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.2rem;
+  color: #9eb69e;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 1.35rem;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 0.95rem;
+  margin-bottom: 0.55rem;
+}
+
+.join {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.scene {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#firstPerson {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#miniMap {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: min(34vw, 360px);
+  height: min(34vw, 360px);
+  min-width: 210px;
+  min-height: 210px;
+  border: 2px solid rgba(255, 248, 231, 0.74);
+  border-radius: 7px;
+  background: #122016;
+}
+
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  background: rgba(16, 22, 20, 0.76);
+  color: #fff8e7;
+  font-size: 1.1rem;
+}
+
+.pause-overlay[hidden] {
+  display: none;
+}
+
+.pause-overlay strong {
+  font-size: 2rem;
+}
+
+.survey-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  min-height: 46px;
+  padding: 0 1.1rem;
+  border-radius: 6px;
+  background: #f2c94c;
+  color: #142016;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.survey-link[hidden] {
+  display: none;
+}
+
+.move-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 42px);
+  grid-template-rows: repeat(2, 42px);
+  gap: 6px;
+}
+
+.move-grid button {
+  min-width: 42px;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.turn-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.walk-forward {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.turn-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.walk-backward {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.readout {
+  color: #cdd8ca;
+  min-width: 230px;
+  font-size: 0.88rem;
+}
+
+.bulldozer-controls {
+  display: grid;
+  gap: 6px;
+  color: #d8c5a7;
+  font-size: 0.78rem;
+}
+
+.bulldozer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bulldozer-row button {
+  min-height: 36px;
+  padding-inline: 0.55rem;
+}
+
+.chat-panel {
+  display: grid;
+  grid-template-rows: minmax(112px, 0.72fr) minmax(180px, 1fr) auto;
+  border-left: 1px solid #2d3e33;
+  background: #111b16;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.context-stack {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mission,
+.drone-report,
+.coordination {
+  padding: 12px 14px;
+  border-bottom: 1px solid #2d3e33;
+}
+
+.mission-clock {
+  display: grid;
+  justify-items: center;
+  min-width: 88px;
+  padding: 6px 12px;
+  border-left: 1px solid #34483b;
+  border-right: 1px solid #34483b;
+}
+
+.mission-clock span {
+  color: #9eb69e;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.mission-clock strong {
+  color: #fff8e7;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-heading h2 {
+  margin-bottom: 0.55rem;
+}
+
+.ai-status {
+  color: #d6b98b;
+  font-size: 0.68rem;
+}
+
+.ai-status.connected {
+  color: #8dd3a0;
+}
+
+.status-stack {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.coordination-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.coordination-actions button {
+  min-height: 42px;
+  padding: 0.45rem;
+  font-size: 0.73rem;
+}
+
+.agent-mark,
+.message-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 850;
+  color: #0d1712;
+  background: #56ccf2;
+}
+
+.agent-mark {
+  width: 23px;
+  height: 23px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.mission p,
+.drone-report p {
+  margin-bottom: 0;
+  color: #dce7d9;
+  line-height: 1.4;
+}
+
+.drone-report {
+  background: #142019;
+}
+
+.drone-report p {
+  color: #c9e7ea;
+}
+
+.messages {
+  overflow: auto;
+  min-height: 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #2d3e33;
+}
+
+.message {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 8px;
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #1c2a22;
+  border: 1px solid #2d3e33;
+  line-height: 1.38;
+}
+
+.message.participant .message-avatar {
+  background: #f2c94c;
+}
+
+.message.helicopter .message-avatar {
+  background: #eb5757;
+}
+
+.message.drone .message-avatar {
+  background: #56ccf2;
+}
+
+.message.bulldozer .message-avatar {
+  background: #b9864b;
+}
+
+.message.participant {
+  align-self: flex-end;
+  background: #31321f;
+  border-color: #5c5a31;
+}
+
+.message small {
+  display: block;
+  color: #aab9a7;
+  margin-bottom: 0.25rem;
+}
+
+.chat-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 10px 14px 12px;
+  border-top: 1px solid #2d3e33;
+}
+
+.chat-form textarea {
+  grid-column: 1 / -1;
+  min-height: 58px;
+}
+
+.chat-form button {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 76px;
+}
+
+@media (max-height: 760px) and (min-width: 941px) {
+  .chat-panel {
+    grid-template-rows: minmax(92px, 0.58fr) minmax(150px, 1fr) auto;
+  }
+
+  .mission,
+  .drone-report,
+  .coordination {
+    padding: 8px 10px;
+  }
+
+  .coordination-actions button {
+    min-height: 34px;
+  }
+
+  .messages {
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .message {
+    padding: 7px 9px;
+    font-size: 0.82rem;
+  }
+
+  .chat-form {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 940px) {
+  html,
+  body {
+    overflow: auto;
+  }
+
+  .client-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .chat-panel {
+    height: min(760px, 82vh);
+    min-height: 520px;
+    border-left: 0;
+    border-top: 1px solid #2d3e33;
+  }
+
+  .hud,
+  .join {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

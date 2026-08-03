@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildfire Client</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../shared/env.js"></script>
+  </head>
+  <body>
+    <main class="client-layout">
+      <section class="view-panel">
+        <header class="hud">
+          <div>
+            <p class="eyebrow">Participant</p>
+            <h1>Firefighter View</h1>
+          </div>
+          <div class="mission-clock" aria-label="Mission time remaining">
+            <span>Mission</span>
+            <strong id="missionClock">30:00</strong>
+          </div>
+          <div class="join">
+            <input id="sessionId" value="pilot-001" aria-label="Session ID" />
+            <button id="joinBtn">Join</button>
+          </div>
+        </header>
+
+        <div class="scene">
+          <canvas id="firstPerson" aria-label="First person wildfire view"></canvas>
+          <canvas id="miniMap" aria-label="Drone minimap"></canvas>
+          <div id="pauseOverlay" class="pause-overlay" hidden>
+            <strong id="pauseTitle">Session Paused</strong>
+            <span id="pauseReason"></span>
+            <a id="surveyLink" class="survey-link" href="https://example.qualtrics.com/jfe/form/SV_PLACEHOLDER" target="_blank" rel="noopener noreferrer" hidden>Open Survey</a>
+          </div>
+        </div>
+
+        <footer class="controls">
+          <div class="move-grid">
+            <button data-turn="-1" class="secondary turn-left" aria-label="Turn left" title="Turn left (A or Left Arrow)">&#8634;</button>
+            <button data-walk="4" class="walk-forward" aria-label="Walk forward" title="Walk forward (W or Up Arrow)">&#8593;</button>
+            <button data-turn="1" class="secondary turn-right" aria-label="Turn right" title="Turn right (D or Right Arrow)">&#8635;</button>
+            <button data-walk="-2" class="secondary walk-backward" aria-label="Walk backward" title="Walk backward (S or Down Arrow)">&#8595;</button>
+          </div>
+          <button id="sprayBtn">Spray</button>
+          <button id="refillBtn" class="secondary">Refill</button>
+          <button id="cutBtn" class="secondary">Cut</button>
+          <button id="acceptBtn" class="secondary">Accept AI</button>
+          <button id="overrideBtn" class="secondary">Override</button>
+          <div class="bulldozer-controls">
+            <span>Bulldozer</span>
+            <div class="bulldozer-row">
+              <button data-bulldozer-move="0,-4" class="secondary" aria-label="Move bulldozer north">N</button>
+              <button data-bulldozer-move="-4,0" class="secondary" aria-label="Move bulldozer west">W</button>
+              <button data-bulldozer-move="4,0" class="secondary" aria-label="Move bulldozer east">E</button>
+              <button data-bulldozer-move="0,4" class="secondary" aria-label="Move bulldozer south">S</button>
+              <button id="bulldozerCutBtn" class="secondary">Firebreak</button>
+            </div>
+          </div>
+          <div class="readout" id="readout"></div>
+        </footer>
+      </section>
+
+      <aside class="chat-panel">
+        <div class="context-stack">
+          <section class="mission">
+            <h2>Mission</h2>
+            <p id="missionText">Join a session.</p>
+          </section>
+          <section class="drone-report">
+            <h2><span class="agent-mark drone-mark" aria-hidden="true">DR</span> Drone Scout Report</h2>
+            <p id="droneReport">Waiting for drone report.</p>
+          </section>
+          <section class="coordination">
+            <div class="section-heading">
+              <h2>Team Coordination</h2>
+              <span class="status-stack">
+                <span id="aiStatus" class="ai-status">AI checking</span>
+                <span id="realtimeStatus" class="ai-status">Realtime checking</span>
+              </span>
+            </div>
+            <div class="coordination-actions">
+              <button data-team-action="check_helicopter" class="secondary">Drone: Locate Heli</button>
+              <button data-team-action="share_intel" class="secondary">Share Drone Intel</button>
+              <button data-team-action="reassign_helicopter">Reassign Heli</button>
+            </div>
+          </section>
+        </div>
+        <section class="messages" id="messages"></section>
+        <form id="chatForm" class="chat-form">
+          <select id="chatTarget" aria-label="Chat target">
+            <option value="helicopter">Helicopter AI</option>
+            <option value="drone">Drone AI</option>
+          </select>
+          <textarea id="chatInput" rows="2" placeholder="Message the selected AI"></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </aside>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
