@@ -2,9 +2,32 @@
   publish = "."
   functions = "netlify/functions"
 
+[functions]
+  node_bundler = "esbuild"
+
 [[redirects]]
   from = "/"
   to = "/server/"
+  status = 302
+
+[[redirects]]
+  from = "/high/server"
+  to = "/server/?testbed=high"
+  status = 302
+
+[[redirects]]
+  from = "/high/client"
+  to = "/client/?testbed=high"
+  status = 302
+
+[[redirects]]
+  from = "/mixed/server"
+  to = "/server/?testbed=mixed"
+  status = 302
+
+[[redirects]]
+  from = "/mixed/client"
+  to = "/client/?testbed=mixed"
   status = 302
 
 [[headers]]

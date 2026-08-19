@@ -37,6 +37,17 @@ create table if not exists public.wildfire_survey_checkpoints (
   completed_at timestamptz
 );
 
+create index if not exists wildfire_messages_session_created_idx
+  on public.wildfire_messages (session_id, created_at desc);
+
+create index if not exists wildfire_events_session_created_idx
+  on public.wildfire_events (session_id, created_at desc);
+
+create index if not exists wildfire_surveys_session_created_idx
+  on public.wildfire_survey_checkpoints (session_id, created_at desc);
+
+alter table public.wildfire_sessions replica identity full;
+
 alter table public.wildfire_sessions enable row level security;
 alter table public.wildfire_messages enable row level security;
 alter table public.wildfire_events enable row level security;

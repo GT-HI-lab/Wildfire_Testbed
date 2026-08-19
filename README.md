@@ -1,81 +1,35 @@
-# CREW Wildfire Web Prototype
+# CREW Wildfire Web Testbed
 
-This folder contains two connected web applications for the wildfire trust/distrust study:
+Browser-based human-AI wildfire teaming experiment with an experimenter server console and participant client.
 
-- `server/`: experimenter console with full map, pause/resume, reliability pairing, survey checkpoints, metrics, and event log.
-- `client/`: participant firefighter interface with first-person view, drone minimap, firefighter controls, participant-directed bulldozer controls, and helicopter AI chat.
+## Interfaces
 
-The prototype mirrors the edited CREW Embodied structure: perception/detection, communication, action translation, and action execution are separate. Chat messages to the helicopter are translated into structured commands, then applied to the shared simulation state so the helicopter can move, refill at lakes, deliver water to the firefighter, pick up, and drop off the firefighter. The helicopter does not directly suppress wildfire.
+- `/server/`: experimenter map, study assignment, timer, diagnostics, and export.
+- `/client/`: firefighter first-person view, controls, AI communication, and final in-game survey.
 
-## Local Preview
+## Study Conditions
 
-From this folder:
+- Between subjects: transparency, explainability, or adaptability communication.
+- High testbed: both AIs remain high reliability.
+- Mixed testbed: four within-session phases, High/High, Low/High, High/Low, and Low/Low.
 
-```powershell
-python -m http.server 8888
+## Cross-Device Transport
+
+Production uses strongly consistent Netlify Blobs by default. Supabase is optional. Local browser storage is used only during local development.
+
+## AI
+
+Set `AI_PROVIDER=gemini`, `GEMINI_API_KEY`, and `GEMINI_MODEL=gemini-3.6-flash` in Netlify. Provider and model details are hidden in the participant UI. Deterministic fallbacks preserve command and knowledge constraints.
+
+## Development
+
+```sh
+npm install
+npm run check
+npm test
+netlify dev
 ```
 
-Open:
+Open `http://localhost:8888/server/` and `http://localhost:8888/client/`.
 
-- Server console: `http://localhost:8888/server/`
-- Participant client: `http://localhost:8888/client/`
-
-Without Supabase keys, both apps use `localStorage` and `BroadcastChannel`, so they connect when opened in the same browser profile.
-
-## Supabase Setup
-
-1. Create a Supabase project.
-2. In Supabase SQL Editor, run `supabase/schema.sql`.
-3. Copy your project URL and anon public key.
-4. For local static testing, copy `shared/env.example.js` to `shared/env.js` and fill in:
-
-```js
-window.WILDFIRE_CONFIG = {
-  SUPABASE_URL: "https://YOUR-PROJECT.supabase.co",
-  SUPABASE_ANON_KEY: "YOUR-SUPABASE-ANON-KEY"
-};
-```
-
-Do not commit `shared/env.js`.
-
-The SQL policies are permissive for a pilot study. Before collecting real participant data, replace them with participant-code or authenticated-user policies.
-
-## Netlify Setup
-
-Use this folder as the Netlify base directory:
-
-- Base directory: `wildfire-web`
-- Publish directory: `.`
-- Functions directory: `netlify/functions`
-
-Add these environment variables in Netlify:
-
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- Optional: `OPENAI_API_KEY`
-- Optional: `OPENAI_MODEL`, for example `gpt-4.1-mini`
-
-Routes after deploy:
-
-- `/server/` experimenter console
-- `/client/` participant client
-
-If `OPENAI_API_KEY` is absent, the helicopter uses the deterministic built-in agent. If it is present, the Netlify function asks OpenAI for the reply text while keeping command translation constrained to the allowed CREW helicopter action types.
-
-## GitHub Flow
-
-1. Create a new GitHub repository or use a branch in this CREW repo.
-2. Commit `wildfire-web`.
-3. Connect the repository to Netlify.
-4. Set the Netlify base directory to `wildfire-web`.
-5. Deploy once for a combined server/client site, or deploy the same repo twice if you want separate Netlify URLs for experimenter and participant access.
-
-## Study Notes
-
-- The server owns the simulation clock. Keep the server console open during a session.
-- Pause stops participant action and displays the survey checkpoint overlay in the client.
-- Reliability pairing controls helicopter/drone behavior:
-  - `High-High`: accurate helicopter movement and drone detections.
-  - `Mixed`: accurate drone detections and helicopter behavior until the hidden post-section malfunction.
-  - `Low-Low`: degraded helicopter movement and noisier drone detections.
-- Behavioral metrics tracked in state include chat count, helicopter commands, detections, firefighter water drops, helicopter water transfers, bulldozer actions, recommendation acceptance, overrides, and score.
+See `EXPERIMENTER_MANUAL.md` for deployment and complete operating instructions. Configure final survey questions in `shared/survey-config.js`.

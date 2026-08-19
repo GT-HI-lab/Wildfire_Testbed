@@ -16,6 +16,10 @@
             <p class="eyebrow">Participant</p>
             <h1>Firefighter View</h1>
           </div>
+          <div class="mission-clock" aria-label="Mission time remaining">
+            <span>Mission</span>
+            <strong id="missionClock">30:00</strong>
+          </div>
           <div class="join">
             <input id="sessionId" value="pilot-001" aria-label="Session ID" />
             <button id="joinBtn">Join</button>
@@ -26,20 +30,26 @@
           <canvas id="firstPerson" aria-label="First person wildfire view"></canvas>
           <canvas id="miniMap" aria-label="Drone minimap"></canvas>
           <div id="pauseOverlay" class="pause-overlay" hidden>
-            <strong>Session Paused</strong>
+            <strong id="pauseTitle">Session Paused</strong>
             <span id="pauseReason"></span>
+            <form id="surveyForm" class="survey-form" hidden>
+              <div id="surveyQuestions"></div>
+              <p id="surveyEmpty" class="survey-empty">Final survey items have not been configured.</p>
+              <button type="submit">Submit Survey</button>
+            </form>
           </div>
         </div>
 
         <footer class="controls">
           <div class="move-grid">
-            <button data-move="0,-4" aria-label="Move north">N</button>
-            <button data-move="-4,0" aria-label="Move west">W</button>
-            <button data-move="4,0" aria-label="Move east">E</button>
-            <button data-move="0,4" aria-label="Move south">S</button>
+            <button data-turn="-1" class="secondary turn-left" aria-label="Turn left" title="Turn left (A or Left Arrow)">&#8634;</button>
+            <button data-walk="1" class="walk-forward" aria-label="Walk forward" title="Walk forward (W or Up Arrow)">&#8593;</button>
+            <button data-turn="1" class="secondary turn-right" aria-label="Turn right" title="Turn right (D or Right Arrow)">&#8635;</button>
+            <button data-walk="-1" class="secondary walk-backward" aria-label="Walk backward" title="Walk backward (S or Down Arrow)">&#8595;</button>
           </div>
           <button id="sprayBtn">Spray</button>
-          <button id="cutBtn" class="secondary">Cut</button>
+          <button id="refillBtn" class="secondary">Refill</button>
+          <button id="cutBtn" class="secondary">Cut Tree</button>
           <button id="acceptBtn" class="secondary">Accept AI</button>
           <button id="overrideBtn" class="secondary">Override</button>
           <div class="bulldozer-controls">
@@ -53,29 +63,46 @@
             </div>
           </div>
           <div class="readout" id="readout"></div>
+          <div class="stamina" aria-label="Firefighter stamina">
+            <span>Stamina</span>
+            <progress id="staminaMeter" max="100" value="100"></progress>
+            <strong id="staminaValue">100</strong>
+          </div>
         </footer>
       </section>
 
       <aside class="chat-panel">
-        <section class="mission">
-          <h2>Mission</h2>
-          <p id="missionText">Join a session.</p>
-        </section>
-        <section class="drone-report">
-          <h2>Drone Scout Report</h2>
-          <p id="droneReport">Waiting for drone report.</p>
-        </section>
-        <section class="trust-feedback">
-          <h2>Helicopter Feedback</h2>
-          <div class="trust-row">
-            <button data-trust="trust">Trust +</button>
-            <button data-trust="neutral" class="secondary">Neutral</button>
-            <button data-trust="distrust" class="secondary">Distrust -</button>
-          </div>
-        </section>
+        <div class="context-stack">
+          <section class="mission">
+            <h2>Mission</h2>
+            <p id="missionText">Join a session.</p>
+          </section>
+          <details class="drone-report">
+            <summary><span class="agent-mark drone-mark" aria-hidden="true">DR</span> Drone Scout Report</summary>
+            <p id="droneReport">Waiting for drone report.</p>
+          </details>
+          <section class="coordination">
+            <div class="section-heading">
+              <h2>Team Coordination</h2>
+              <span class="status-stack">
+                <span id="aiStatus" class="ai-status">AI checking</span>
+                <span id="realtimeStatus" class="ai-status">Realtime checking</span>
+              </span>
+            </div>
+            <div class="coordination-actions">
+              <button data-team-action="check_helicopter" class="secondary">Drone: Locate Heli</button>
+              <button data-team-action="share_intel" class="secondary">Share Drone Intel</button>
+              <button data-team-action="reassign_helicopter">Reassign Heli</button>
+            </div>
+          </section>
+        </div>
         <section class="messages" id="messages"></section>
         <form id="chatForm" class="chat-form">
-          <textarea id="chatInput" rows="3" placeholder="Message helicopter AI"></textarea>
+          <select id="chatTarget" aria-label="Chat target">
+            <option value="helicopter">Helicopter AI</option>
+            <option value="drone">Drone AI</option>
+          </select>
+          <textarea id="chatInput" rows="2" placeholder="Message the selected AI"></textarea>
           <button type="submit">Send</button>
         </form>
       </aside>

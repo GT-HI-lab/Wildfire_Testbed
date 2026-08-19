@@ -43,28 +43,37 @@
             <span id="statusPill" class="pill">Disconnected</span>
             <span id="tickLabel">Tick 0</span>
           </div>
+          <div class="mission-status">
+            <span>Mission remaining</span>
+            <strong id="missionClock">30:00</strong>
+            <small id="aiStatus">AI checking</small>
+            <small id="realtimeStatus">Realtime checking</small>
+          </div>
           <div class="button-row">
             <button id="pauseBtn">Pause</button>
             <button id="resumeBtn" class="secondary">Resume</button>
           </div>
           <label>
-            Reliability pairing
+            Testbed
             <select id="conditionSelect">
-              <option>High-High</option>
+              <option>High</option>
               <option selected>Mixed</option>
-              <option>Low-Low</option>
+            </select>
+            <span id="conditionSummary" class="condition-summary"></span>
+          </label>
+          <label>
+            Communication style
+            <select id="communicationStyleSelect">
+              <option value="transparent">Transparency</option>
+              <option value="explainable">Explainability</option>
+              <option value="adaptive">Adaptability</option>
             </select>
           </label>
         </section>
 
         <section class="control-block survey">
-          <h2>Survey Checkpoint</h2>
-          <div class="button-row">
-            <button data-survey="T1">T1</button>
-            <button data-survey="T2">T2</button>
-            <button data-survey="T3">T3</button>
-          </div>
-          <button id="clearSurveyBtn" class="secondary wide">Clear Survey Pause</button>
+          <h2>Final Survey</h2>
+          <small id="surveyStatus" class="ai-status">Opens automatically in the participant client when the mission ends.</small>
         </section>
 
         <section class="metrics" id="metrics"></section>
