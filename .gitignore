@@ -1,4 +1,0 @@
-.env
-shared/env.js
-node_modules/
-*.log
