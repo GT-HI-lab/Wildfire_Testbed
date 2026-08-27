@@ -1,0 +1,14 @@
+{
+  "name": "crew-wildfire-prolific-automated",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "check": "node --check server/app.js && node --check client/app.js && node --check shared/survey-config.js && node --check shared/simulation.js && node --check shared/map-renderer.js && node --check shared/realtime.js && node --check netlify/functions/agent-ai.mjs && node --check netlify/functions/config.mjs && node --check netlify/functions/session-state.mjs && node --check netlify/functions/study-enrollment.mjs && node --check netlify/functions/study-complete.mjs && node --check netlify/functions/study-admin.mjs && node --check netlify/functions/lib/prolific.mjs && node --check netlify/functions/lib/supabase-analytics.mjs && node --check scripts/dev-server.mjs",
+    "test": "node tests/simulation-smoke.mjs && node tests/agent-smoke.mjs && node tests/realtime-smoke.mjs && node tests/concurrency-smoke.mjs && node tests/session-backend-smoke.mjs && node tests/prolific-study-smoke.mjs && node tests/analytics-smoke.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.10"
+  }
+}
