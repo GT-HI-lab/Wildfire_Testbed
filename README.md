@@ -1,6 +1,6 @@
-# CREW Wildfire: Automated Prolific Edition
+# CREW Wildfire Modified: Automated Prolific Edition
 
-This is a separate unattended-study edition of the CREW Wildfire testbed. The earlier project at `/Users/shiwenzhou/Documents/GitHub/wildfire-web` is not modified by this edition.
+
 
 ## Deployment Shape
 
