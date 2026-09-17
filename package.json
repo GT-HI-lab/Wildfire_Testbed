@@ -1,0 +1,21 @@
+{
+  "name": "crew-wildfire-prolific-automated",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "check": "node --check server/app.js && node --check client/app.js && node --check shared/survey-config.js && node --check shared/simulation.js && node --check shared/map-renderer.js && node --check shared/realtime.js && node --check netlify/functions/agent-ai.mjs && node --check netlify/functions/config.mjs && node --check netlify/functions/session-state.mjs && node --check netlify/functions/study-enrollment.mjs && node --check netlify/functions/study-complete.mjs && node --check netlify/functions/study-admin.mjs && node --check netlify/functions/lib/prolific.mjs && node --check netlify/functions/lib/supabase-analytics.mjs && node --check scripts/dev-server.mjs && node --check scripts/build.mjs && node --check netlify/functions/lib/study-config.mjs && node --check netlify/functions/lib/study-auth.mjs && node --check scripts/verify-site.mjs && node --check tests/http-smoke.mjs && node --check shared/surveys.js && node --check tests/surveys-smoke.mjs && node --check shared/detection-task.js && node --check client/detection-controller.js && node --check netlify/functions/detection-events.mjs",
+    "test": "node tests/simulation-smoke.mjs && node tests/agent-smoke.mjs && node tests/realtime-smoke.mjs && node tests/concurrency-smoke.mjs && node tests/session-backend-smoke.mjs && node tests/prolific-study-smoke.mjs && node tests/analytics-smoke.mjs && node tests/prolific-auth-smoke.mjs && node tests/surveys-smoke.mjs && node tests/detection-smoke.mjs && node scripts/build.mjs && node tests/http-smoke.mjs",
+    "build": "node scripts/build.mjs",
+    "dev:configured": "node --env-file=.env.local scripts/dev-server.mjs",
+    "verify:site": "node scripts/verify-site.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.10"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.19.0"
+}

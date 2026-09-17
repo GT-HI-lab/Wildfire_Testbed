@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import { DetectionTask, DETECTION_CONFIG } from '../shared/detection-task.js';
+import { mergeDetectionRecords, validateRecord } from '../netlify/functions/detection-events.mjs';
+let now=0, count=0, lamp=false, focused=false;const records=[];
+const task=new DetectionTask({clock:()=>now,epoch:t=>1700000000000+t,random:()=>0,id:()=>`test-${++count}`,onLamp:on=>lamp=on,onRecord:r=>records.push(r),scenarioTime:()=>now,textFocused:()=>focused});
+function advance(to){while(now<to){now=Math.min(to,now+10);task.tick();}}
+task.resume();advance(16990);assert.equal(lamp,false);advance(17000);assert.equal(lamp,true);
+advance(17500);task.press();assert.equal(records.at(-1).rt_ms,500);assert.equal(lamp,true);
+task.press({repeat:true});task.press();assert.equal(records.length,2);
+advance(19990);assert.equal(lamp,true);advance(20000);assert.equal(lamp,false);assert.equal(records.at(-1).status,'hit');
+advance(20010);task.press();assert.equal(records.at(-1).false_alarm,true);
+advance(36990);assert.equal(lamp,false);advance(37000);assert.equal(lamp,true);
+focused=true;advance(37500);task.press({editable:true});advance(40000);assert.equal(records.at(-1).miss,true);assert.equal(records.at(-1).text_focus_during_probe,true);
+advance(57000);assert.equal(lamp,true);task.suspend('questionnaire');assert.equal(records.at(-1).status,'interrupted');assert.equal(records.at(-1).miss,false);
+const n=records.length;task.press();advance(60000);assert.equal(records.length,n);
+task.resume();advance(77000);assert.equal(lamp,true);now+=500;task.tick();assert.equal(records.at(-1).interruption_reason,'frame_gap');
+for(const r of records)validateRecord(r);
+const merged=mergeDetectionRecords([],records);assert.equal(merged.length,count);
+assert.deepEqual(mergeDetectionRecords(merged,[records[0]]),merged);
+assert.equal(DETECTION_CONFIG.minGapMs+DETECTION_CONFIG.lampMs,20000);
+console.log('Detection tests passed: timing, fixed duration, post-offset delay, hit/miss/false alarm, repeat/text exclusions, focus flags, interruptions and idempotence.');

@@ -1,0 +1,604 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #101614;
+  color: #fff8e7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.entry-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #101614;
+}
+
+.entry-overlay[hidden] {
+  display: none;
+}
+
+.entry-panel {
+  width: min(520px, 100%);
+  padding: 24px;
+  border: 1px solid #405242;
+  border-radius: 7px;
+  background: #111b16;
+}
+
+.entry-panel h1 {
+  margin-bottom: 12px;
+}
+
+.entry-panel p:not(.eyebrow) {
+  color: #dce7d9;
+  line-height: 1.5;
+}
+
+.entry-panel button {
+  margin-top: 6px;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: #101614;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  background: #f2c94c;
+  color: #142016;
+  min-height: 42px;
+  padding: 0 0.9rem;
+  font-weight: 750;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+button.secondary {
+  background: #243229;
+  color: #f6f1e8;
+  border: 1px solid #405242;
+}
+
+input,
+select,
+textarea {
+  border-radius: 6px;
+  border: 1px solid #405242;
+  background: #151f1a;
+  color: #fff8e7;
+}
+
+input,
+select {
+  min-height: 42px;
+  padding: 0 0.75rem;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  padding: 0.75rem;
+}
+
+.client-layout {
+  height: 100vh;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(380px, 34vw, 460px);
+}
+
+.view-panel {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.hud,
+.controls {
+  background: #111b16;
+  border-color: #2d3e33;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+}
+
+.hud {
+  border-bottom: 1px solid #2d3e33;
+}
+
+.controls {
+  border-top: 1px solid #2d3e33;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.2rem;
+  color: #9eb69e;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 1.35rem;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 0.95rem;
+  margin-bottom: 0.55rem;
+}
+
+.study-progress {
+  display: grid;
+  gap: 2px;
+  color: #9eb69e;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.study-progress strong {
+  color: #fff8e7;
+  font-size: 0.9rem;
+}
+
+.scene {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#firstPerson {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#miniMap {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: clamp(170px, 24vw, 280px);
+  height: clamp(170px, 24vw, 280px);
+  border: 2px solid rgba(255, 248, 231, 0.74);
+  border-radius: 7px;
+  background: #122016;
+}
+
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  background: rgba(16, 22, 20, 0.76);
+  color: #fff8e7;
+  font-size: 1.1rem;
+}
+
+.pause-overlay[hidden] {
+  display: none;
+}
+
+.pause-overlay strong {
+  font-size: 2rem;
+}
+
+.survey-form {
+  width: min(620px, 88vw);
+  max-height: min(68vh, 640px);
+  overflow: auto;
+  padding: 18px;
+  border-radius: 6px;
+  background: #111b16;
+  border: 1px solid #405242;
+  text-align: left;
+}
+
+.survey-form[hidden] {
+  display: none;
+}
+
+.survey-form label,
+.survey-form #surveyQuestions {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.survey-empty {
+  color: #cdd8ca;
+}
+
+.move-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 42px);
+  grid-template-rows: repeat(2, 42px);
+  gap: 6px;
+}
+
+.move-grid button {
+  min-width: 42px;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.turn-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.walk-forward {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.turn-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.walk-backward {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.readout {
+  color: #cdd8ca;
+  min-width: 230px;
+  font-size: 0.88rem;
+}
+
+.stamina {
+  display: grid;
+  grid-template-columns: auto minmax(90px, 150px) 28px;
+  align-items: center;
+  gap: 7px;
+  color: #cdd8ca;
+  font-size: 0.78rem;
+}
+
+.stamina progress {
+  width: 100%;
+  accent-color: #f2c94c;
+}
+
+.bulldozer-controls {
+  display: grid;
+  gap: 6px;
+  color: #d8c5a7;
+  font-size: 0.78rem;
+}
+
+.bulldozer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.bulldozer-row button {
+  min-height: 36px;
+  padding-inline: 0.55rem;
+}
+
+.chat-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 25vh) minmax(250px, 1fr) auto;
+  border-left: 1px solid #2d3e33;
+  background: #111b16;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.context-stack {
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.mission,
+.drone-report,
+.coordination {
+  padding: 12px 14px;
+  border-bottom: 1px solid #2d3e33;
+}
+
+.mission-clock {
+  display: grid;
+  justify-items: center;
+  min-width: 88px;
+  padding: 6px 12px;
+  border-left: 1px solid #34483b;
+  border-right: 1px solid #34483b;
+}
+
+.mission-clock span {
+  color: #9eb69e;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.mission-clock strong {
+  color: #fff8e7;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.section-heading h2 {
+  margin-bottom: 0.55rem;
+}
+
+.ai-status {
+  color: #d6b98b;
+  font-size: 0.68rem;
+}
+
+.ai-status.connected {
+  color: #8dd3a0;
+}
+
+.status-stack {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+}
+
+.coordination-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.coordination-actions button {
+  min-height: 42px;
+  padding: 0.45rem;
+  font-size: 0.73rem;
+}
+
+.agent-mark,
+.message-avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 850;
+  color: #0d1712;
+  background: #56ccf2;
+}
+
+.agent-mark {
+  width: 23px;
+  height: 23px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.mission p,
+.drone-report p {
+  margin-bottom: 0;
+  color: #dce7d9;
+  line-height: 1.4;
+}
+
+.drone-report {
+  background: #142019;
+}
+
+.drone-report summary {
+  cursor: pointer;
+  color: #c9e7ea;
+  font-size: 0.9rem;
+  font-weight: 750;
+  list-style-position: inside;
+}
+
+.drone-report[open] summary {
+  margin-bottom: 0.55rem;
+}
+
+.drone-report p {
+  color: #c9e7ea;
+}
+
+.messages {
+  overflow: auto;
+  min-height: 0;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #2d3e33;
+}
+
+.message {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 8px;
+  max-width: 92%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #1c2a22;
+  border: 1px solid #2d3e33;
+  line-height: 1.38;
+}
+
+.message.participant .message-avatar {
+  background: #f2c94c;
+}
+
+.message.helicopter .message-avatar {
+  background: #eb5757;
+}
+
+.message.drone .message-avatar {
+  background: #56ccf2;
+}
+
+.message.bulldozer .message-avatar {
+  background: #b9864b;
+}
+
+.message.participant {
+  align-self: flex-end;
+  background: #31321f;
+  border-color: #5c5a31;
+}
+
+.message small {
+  display: block;
+  color: #aab9a7;
+  margin-bottom: 0.25rem;
+}
+
+.chat-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 10px 14px 12px;
+  border-top: 1px solid #2d3e33;
+}
+
+.chat-form textarea {
+  grid-column: 1 / -1;
+  min-height: 58px;
+}
+
+.chat-form button {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 76px;
+}
+
+@media (max-height: 760px) and (min-width: 941px) {
+  .chat-panel {
+    grid-template-rows: auto auto minmax(220px, 1fr) auto;
+  }
+
+  .context-stack {
+    max-height: 190px;
+  }
+
+  .mission,
+  .drone-report,
+  .coordination {
+    padding: 8px 10px;
+  }
+
+  .coordination-actions button {
+    min-height: 34px;
+  }
+
+  .messages {
+    gap: 6px;
+    padding: 8px 10px;
+  }
+
+  .message {
+    padding: 7px 9px;
+    font-size: 0.82rem;
+  }
+
+  .chat-form {
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 940px) {
+  html,
+  body {
+    overflow: auto;
+  }
+
+  .client-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .chat-panel {
+    height: 88vh;
+    min-height: 600px;
+    border-left: 0;
+    border-top: 1px solid #2d3e33;
+  }
+
+  .hud {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .chat-panel {
+    grid-template-rows: minmax(0, 24vh) minmax(300px, 1fr) auto;
+  }
+}
+
+/* Full-window survey dialog keeps all game controls behind the pause. */
+.pause-overlay { position: fixed; z-index: 19; padding: 20px; overflow: auto; background: rgba(10, 18, 14, .96); }
+.survey-form { width: min(860px, 94vw); max-height: 72vh; padding: 24px; }
+.survey-form h2 { margin: 24px 0 8px; color: #f2c94c; }
+.survey-form h2:first-child { margin-top: 0; }
+.survey-instructions { color: #cdd8ca; line-height: 1.5; }
+.survey-item { margin: 0 0 20px; padding: 14px; border: 1px solid #405242; border-radius: 8px; min-width: 0; }
+.survey-item legend { padding: 0 5px; font-weight: 700; }
+.survey-item p { font-size: 15px; line-height: 1.5; margin: 0 0 12px; }
+.rating-anchors { display: flex; justify-content: space-between; gap: 16px; color: #cdd8ca; font-size: 13px; margin-bottom: 10px; }
+.rating-options { display: flex; flex-wrap: wrap; gap: 7px; }
+.survey-form label.rating-option { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 48px; min-height: 44px; padding: 7px; margin: 0; border: 1px solid #57725d; border-radius: 5px; cursor: pointer; font-size: 14px; }
+.survey-form label.rating-option:has(input:checked) { background: #f2c94c; color: #142016; border-color: #f2c94c; }
+.survey-form label.rating-option:focus-within { outline: 2px solid #fff8e7; outline-offset: 2px; }
+.survey-form input[type=radio] { width: 15px; height: 15px; min-height: 0; margin: 0; padding: 0; accent-color: #263f2c; }
+.survey-form .not-fit { min-width: 125px; }
+.survey-form button[type=submit] { width: 100%; margin-top: 12px; }
+.survey-form button:disabled { opacity: .6; cursor: wait; }
+
+.detection-strip { display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 7px 16px; background: #080c0a; border-bottom: 1px solid #536357; font-size: 13px; }
+.detection-lamp { display: inline-block; flex: 0 0 25px; width: 25px; height: 25px; border-radius: 50%; background: #34382d; border: 2px solid #a4ad9e; }
+.detection-lamp.on { background: #ffbf00; border-color: #ffe692; }
+#detectionStart[hidden] { display: none; }

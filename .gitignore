@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+shared/env.js
+node_modules/
+*.log
+dist/
+.netlify/
